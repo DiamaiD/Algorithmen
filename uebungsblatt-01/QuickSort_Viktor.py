@@ -30,11 +30,10 @@ def quicksort_recursive(array, left, right, if_randomized):
         int right:    right index till which the rearrangement goes.
         bool if_randomized:    method how to pick pivot. True if randomized.
     """
-    if right - left > 1:
+    if left < right:
         pivot = quicksort_divide(array, left, right, if_randomized)
-        if right - left > 2:
-            quicksort_recursive(array, left, pivot-1, if_randomized)
-            quicksort_recursive(array, pivot, right, if_randomized)
+        quicksort_recursive(array, left, pivot-1, if_randomized)
+        quicksort_recursive(array, pivot+1, right, if_randomized)
 
 
 
@@ -56,32 +55,25 @@ def quicksort_divide(array, left, right, if_randomized):
     """
 
     if if_randomized == True:
-        pivot = array.index(random.choice(array[left:right+1]))
+        pivotindex = array.index(random.choice(array[left:right+1]))
+        pivot = array[pivotindex]
     else:
-        pivot = left
-    
-    # pivotnumber = array[pivot]
+        pivot = array[right]
+        pivotindex = right
 
-    # if right - left == 2:
-    #     if array[left] > array[right]:
-    #         array[left], array[right] = array[right], array[left]
-    #     return pivot
-
-    while left != right:
-        if array[left] < array[pivot]:
+    for i in range(left, right):
+        if array[i] < pivot:
+            array[left], array[i] = array[i], array[left]
             left += 1
-        elif array[right] >= array[pivot]:
-            right -= 1
-        else:
-            array[left], array[right] = array[right], array[left]
 
-    # return array.index(pivotnumber)
-    return pivot
+    array[left], array[pivotindex] = array[pivotindex], array[left]
 
-arraytest = [20,4,8,2,6,3,6,10,4,7,3]
+    return left
+
+arraytest = [20,4,8,2,6,3,10,7,234,5464,64577,1,1,454,4]
 
 print("\nnot random")
 quicksort(arraytest, False)
 
-# print("\nrandom")
-# quicksort([20,4,8,2,6,3,6,10,4,7,3])
+print("\nrandom")
+quicksort(arraytest)
